@@ -25,7 +25,7 @@ class AvailabilityChecker:
                     self.status = {
                         'status': 'online',
                         'response_code': response.status,
-                        'url': response.host,
+                        'url': checking_host,
                         'method': response.method,
                         'content_type': response.content_type,
                         'content_length': response.content_length
