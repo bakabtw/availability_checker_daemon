@@ -1,5 +1,5 @@
 import unittest
-from checker import AvailabilityChecker
+from availability_checker.checker import AvailabilityChecker
 
 host = {
     'name': 'Test server',
