@@ -7,31 +7,43 @@ This is the alfa version!
 
 # Usage
 ```python
-hosts = [
-        {
-            'server': 'knst.me',
-            'port': 443,
-            'method': 'https',
-            'path': '/pub/'
-        },
-        {
-            'server': 'knst.me',
-            'port': 80,
-            'method': 'http',
-            'path': '/'
-        },
-        # Intentionally broken
-        {
-            'server': 'knst.me',
-            'port': 80,
-            'method': 'https',
-            'path': '/'
-        },
-    ]
+import asyncio
+from availability_checker.checker import AvailabilityChecker
 
-for host in hosts:
-    checker = await AvailabilityChecker(host).check()
-    print(checker)
+
+async def main():
+    while True:
+        hosts = [
+                    {
+                        'server': 'knst.me',
+                        'port': 443,
+                        'method': 'https',
+                        'path': '/pub/'
+                    },
+                    {
+                        'server': 'knst.me',
+                        'port': 80,
+                        'method': 'http',
+                        'path': '/'
+                    },
+                    # Intentionally broken
+                    {
+                        'server': 'knst.me',
+                        'port': 80,
+                        'method': 'https',
+                        'path': '/'
+                    },
+                ]
+
+        for host in hosts:
+            checker = await AvailabilityChecker(host).check()
+            print(checker)
+
+        await asyncio.sleep(5)
+
+
+if __name__ == '__main__':
+    asyncio.run(main())
 ```
 
 # Result
