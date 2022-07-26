@@ -50,13 +50,13 @@ class AvailabilityChecker:
     async def check_https(self):
         return await self.check_http()
 
-    def check(self):
+    async def check(self):
         if self.host['method'] == 'http':
-            asyncio.run(self.check_http())
+            await self.check_http()
 
             return self.status
         elif self.host['method'] == 'https':
-            asyncio.run(self.check_https())
+            await self.check_https()
 
             return self.status
         else:

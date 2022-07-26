@@ -3,14 +3,14 @@ import time
 from availability_checker.checker import AvailabilityChecker
 
 
-def main():
+async def main():
     while True:
         hosts = [
                     {
                         'server': 'knst.me',
                         'port': 443,
                         'method': 'https',
-                        'path': '/'
+                        'path': '/pub/'
                     },
                     {
                         'server': 'knst.me',
@@ -18,6 +18,7 @@ def main():
                         'method': 'http',
                         'path': '/'
                     },
+                    # Intentionally broken
                     {
                         'server': 'knst.me',
                         'port': 80,
@@ -27,11 +28,11 @@ def main():
                 ]
 
         for host in hosts:
-            checker = AvailabilityChecker(host).check()
+            checker = await AvailabilityChecker(host).check()
             print(checker)
 
-        time.sleep(5)
+        await asyncio.sleep(5)
 
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())
