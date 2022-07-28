@@ -28,7 +28,7 @@ class AvailabilityChecker:
                         'url': checking_host,
                         'method': response.method,
                         'content_type': response.content_type,
-                        'content_length': response.content_length
+                        'content_length': response.content_length if (response.content_length is not None) else 0
                     }
 
                     logging.info(f"Host {checking_host} is online")
@@ -41,7 +41,7 @@ class AvailabilityChecker:
                 'url': checking_host,
                 'method': '',
                 'content_type': '',
-                'content_length': ''
+                'content_length': 0
             }
 
             # logging.info(f"Connection error to: {checking_host}")
