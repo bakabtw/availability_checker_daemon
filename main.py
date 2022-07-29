@@ -1,6 +1,7 @@
 import asyncio
 import os
 from pony import orm
+import time
 from availability_checker.checker import AvailabilityChecker
 
 # Time between checks in seconds
@@ -9,7 +10,7 @@ SLEEP_TIMER = 60
 if os.getenv('DEBUG'):
     import logging
 
-    # orm.set_sql_debug(True)
+    orm.set_sql_debug(True)
     logging.basicConfig(level=logging.INFO)
 
 db = orm.Database()
@@ -23,6 +24,8 @@ class Hosts(db.Entity):
     port = orm.Required(int)
     method = orm.Required(str)
     path = orm.Required(str)
+    created = orm.Required(int)
+    updated = orm.Required(int)
 
 
 class Statuses(db.Entity):
@@ -34,6 +37,7 @@ class Statuses(db.Entity):
     content_type = orm.Optional(str)
     content_length = orm.Optional(int)
     server_id = orm.Required(int)
+    timestamp = orm.Required(int)
 
 
 @orm.db_session
@@ -65,7 +69,8 @@ async def write_status(response, server_id):
         method=response['method'],
         content_type=response['content_type'],
         content_length=response['content_length'],
-        server_id=server_id
+        server_id=server_id,
+        timestamp=int(time.time())
         )
 
     return db.commit()
