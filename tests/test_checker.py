@@ -1,4 +1,5 @@
 import unittest
+import asyncio
 from availability_checker.checker import AvailabilityChecker
 
 host = {
@@ -11,7 +12,7 @@ host = {
 
 
 class MyTestCase(unittest.TestCase):
-    def test_AvailibilityChecker_init(self):
+    def test_AvailabilityChecker_init(self):
         checker = AvailabilityChecker(host)
 
         expected = host
@@ -19,7 +20,7 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    def test_AvailibilityChecker_init_empty(self):
+    def test_AvailabilityChecker_init_empty(self):
         with self.assertRaises(Exception) as e:
             checker = AvailabilityChecker([])
 
@@ -28,21 +29,21 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    def test_AvailibilityChecker_check_incorrect_method(self):
+    def test_AvailabilityChecker_check_incorrect_method(self):
         incorrect_host = host
         incorrect_host['method'] = "unknown_method"
 
         print(incorrect_host)
 
         with self.assertRaises(Exception) as e:
-            checker = AvailabilityChecker(incorrect_host).check()
+            checker = asyncio.run(AvailabilityChecker(incorrect_host).check())
 
         expected = "Unknown check method"
         actual = e.exception.args[0]
 
         self.assertEqual(expected, actual)
 
-    def test_check_HTTP_method(self):
+    async def test_check_HTTP_method(self):
         checking_server = {
             'server': 'google.com',
             'port': 80,
@@ -50,14 +51,14 @@ class MyTestCase(unittest.TestCase):
             'path': '/'
         }
 
-        checker = AvailabilityChecker(checking_server).check()
+        checker = asyncio.run(AvailabilityChecker(checking_server).check())
 
         expected = {'status': 'online', 'response_code': 200}
         actual = {'status': checker['status'], 'response_code': checker['response_code']}
 
         self.assertEqual(expected, actual)
 
-    def test_check_HTTPS_method(self):
+    async def test_check_HTTPS_method(self):
         checking_server = {
             'server': 'google.com',
             'port': 443,
@@ -65,7 +66,7 @@ class MyTestCase(unittest.TestCase):
             'path': '/'
         }
 
-        checker = AvailabilityChecker(checking_server).check()
+        checker = asyncio.run(AvailabilityChecker(checking_server).check())
 
         expected = {'status': 'online', 'response_code': 200}
         actual = {'status': checker['status'], 'response_code': checker['response_code']}
@@ -80,7 +81,7 @@ class MyTestCase(unittest.TestCase):
             'path': '/'
         }
 
-        checker = AvailabilityChecker(checking_server).check()
+        checker = asyncio.run(AvailabilityChecker(checking_server).check())
 
         expected = {'status': 'offline'}
         actual = {'status': checker['status']}
